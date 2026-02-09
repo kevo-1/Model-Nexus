@@ -37,3 +37,13 @@ type PredictionError struct {
 func (e *PredictionError) Error() string {
     return fmt.Sprintf("prediction failed for model %s: %v", e.ModelID, e.Cause)
 }
+
+
+
+type ModelAlreadyExistsError struct {
+    ModelID string
+}
+
+func (e *ModelAlreadyExistsError) Error() string {
+    return fmt.Sprintf("model already exists: %s", e.ModelID)
+}
