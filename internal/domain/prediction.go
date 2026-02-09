@@ -1,13 +1,13 @@
 package domain
 
 import (
-	"time"
 	"fmt"
+	"time"
 )
 
 type PredictionRequest struct {
 	ModelID string `json:"model_id"`
-	RequestID string `json:"request_id"`
+	RequestID string `json:"request_id,omitempty"`
 	Features []float64 `json:"features"`
 }
 
