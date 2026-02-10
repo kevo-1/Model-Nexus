@@ -40,3 +40,6 @@ scripts/__pycache__/
 
 # Logs
 *.log
+
+# Env
+.env
