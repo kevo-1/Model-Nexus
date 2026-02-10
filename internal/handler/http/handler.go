@@ -25,6 +25,14 @@ func (h *Handler) SetupRoutes() http.Handler {
     mux.HandleFunc("/health", h.handleHealth)
     mux.HandleFunc("/models", h.handleListModels)
     
+    mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+        if r.URL.Path != "/" {
+            http.NotFound(w, r)
+            return
+        }
+        http.ServeFile(w, r, "index.html")
+    })
+    
     return corsMiddleware(mux)
 }
 
