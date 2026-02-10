@@ -21,6 +21,7 @@ WORKDIR /app
 COPY --from=builder /app/server .
 
 COPY models ./models
+COPY index.html .
 
 EXPOSE 8080
 
