@@ -107,3 +107,21 @@ func (p *ONNXPredictor) Predict(ctx context.Context, features []float64) ([]floa
 
     return output, nil
 }
+
+
+func (p *ONNXPredictor) MetaData() domain.ModelMetadata {
+    return domain.ModelMetadata{
+        ID: p.ID,
+        Name: p.Name,
+        Path: p.Path,
+        Version: p.Version,
+    }
+}
+
+
+func (p *ONNXPredictor) Close() error {
+    if p.session != nil {
+        return p.session.Destroy()
+    }
+    return nil
+}
