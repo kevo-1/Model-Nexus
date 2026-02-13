@@ -4,6 +4,7 @@ import (
 	"sync"
 
 	"github.com/kevo-1/model-serving-platform/internal/domain"
+	"github.com/kevo-1/model-serving-platform/internal/metrics"
 )
 
 
@@ -40,7 +41,9 @@ func (r *ModelRegistry) Register(id string, model domain.ModelPredictor) error {
     }
 
     r.models[id] = model
-    return nil
+	metrics.SetModelsLoaded(len(r.models))
+    
+	return nil
 }
 
 

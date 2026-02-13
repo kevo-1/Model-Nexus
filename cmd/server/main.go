@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"syscall"
 	"runtime"
+	"syscall"
 
 	"github.com/joho/godotenv"
 	httpHandler "github.com/kevo-1/model-serving-platform/internal/handler/http"
@@ -82,6 +82,7 @@ func main() {
 	log.Printf("  POST http://localhost:%s/predict", port)
 	log.Printf("  GET  http://localhost:%s/health", port)
 	log.Printf("  GET  http://localhost:%s/models", port)
+	log.Printf("  GET  http://localhost:%s/metrics", port)
 
     
     // Step 6: Graceful shutdown

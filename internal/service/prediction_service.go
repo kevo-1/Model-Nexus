@@ -6,6 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/kevo-1/model-serving-platform/internal/domain"
+	"github.com/kevo-1/model-serving-platform/internal/metrics"
 	"github.com/kevo-1/model-serving-platform/internal/repository"
 )
 
@@ -29,9 +30,6 @@ func (s *PredictionService) Predict(ctx context.Context, req domain.PredictionRe
 	if req.RequestID == "" {
 		req.RequestID = uuid.New().String()
 	}
-
-    //Start timing
-	start := time.Now()
     
     //get model from registry
 	model, err := s.registry.Get(req.ModelID)
@@ -39,18 +37,27 @@ func (s *PredictionService) Predict(ctx context.Context, req domain.PredictionRe
 		return domain.PredictionResponse{}, err
 	}
 
-    //call model.Predict()
-	prediction, err := model.Predict(ctx, req.Features)
-	if err != nil {
-		return domain.PredictionResponse{}, err
-	}
+    inferenceStart := time.Now()
+    
+    prediction, err := model.Predict(ctx, req.Features)
+    
+    inferenceDuration := time.Since(inferenceStart).Seconds()
+    
+    // Record metrics
+    success := err == nil
+    metrics.RecordPrediction(req.ModelID, success, inferenceDuration)
+    
+    if err != nil {
+        return domain.PredictionResponse{}, err
+    }
 
     //Build response with timing
-	latency := float64(time.Since(start).Microseconds())/1000
+	totalLatency := float64(time.Since(inferenceStart).Microseconds()) / 1000
+	
 	response := domain.PredictionResponse{
 		ModelID: req.ModelID,
 		RequestID: req.RequestID,
-		LatencyMs: latency,
+		LatencyMs: totalLatency,
 		Prediction: prediction,
 		Timestamp: time.Now(),
 	}

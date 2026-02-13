@@ -1,9 +1,11 @@
 package http
 
 import (
-    "net/http"
-    "github.com/kevo-1/model-serving-platform/internal/service"
-    "github.com/kevo-1/model-serving-platform/internal/repository"
+	"net/http"
+
+	"github.com/kevo-1/model-serving-platform/internal/repository"
+	"github.com/kevo-1/model-serving-platform/internal/service"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 type Handler struct {
@@ -24,6 +26,7 @@ func (h *Handler) SetupRoutes() http.Handler {
     mux.HandleFunc("/predict", h.handlePredict)
     mux.HandleFunc("/health", h.handleHealth)
     mux.HandleFunc("/models", h.handleListModels)
+    mux.Handle("/metrics", promhttp.Handler())
     
     mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
         if r.URL.Path != "/" {
@@ -33,7 +36,10 @@ func (h *Handler) SetupRoutes() http.Handler {
         http.ServeFile(w, r, "index.html")
     })
     
-    return corsMiddleware(mux)
+    handler := corsMiddleware(mux)
+    handler = MetricsMiddleware(handler)
+    
+    return handler
 }
 
 func corsMiddleware(next http.Handler) http.Handler {
