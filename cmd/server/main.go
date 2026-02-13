@@ -48,15 +48,19 @@ func main() {
 	registry := repository.NewModelRegistery()
 	
 	
-    // Step 2: Load dummy model(s)
-	dummyModel := onnx.NewDummyPredictor(
-		"iris_v1",              
-		"Iris Classifier",      
-		"v1.0.0",              
+    // Step 2: Load model(s)
+	onnxModel, err := onnx.NewONNXPredictor(
+		"iris_v1",
+		"Iris Classifier",
+		"v1.0.0",
 		"models/iris_classifier_v1.onnx",
 	)
+	if err != nil {
+		log.Fatalf("Failed to load ONNX model: %v", err)
+	}
+	defer onnxModel.Close()
 
-	if err := registry.Register("iris_v1", dummyModel); err != nil {
+	if err := registry.Register("iris_v1", onnxModel); err != nil {
 		log.Fatalf("Failed to register model: %v", err)
 	}
     

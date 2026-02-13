@@ -1,9 +1,9 @@
 package onnx
 
 import (
+	"context"
 	"fmt"
 	"sync"
-	"context"
 
 	"github.com/kevo-1/model-serving-platform/internal/domain"
 	ort "github.com/yalue/onnxruntime_go"
@@ -15,7 +15,7 @@ type ONNXPredictor struct {
 	Path string
 	Version string
 
-	session *ort.DynamicSession[float32, float32]
+	session *ort.DynamicSession[float64, int64]
 
 	inputName string
 	outputName string
@@ -39,7 +39,7 @@ func NewONNXPredictor(id, name, version, path string) (*ONNXPredictor, error) {
     inputNames := []string{"X"}
     outputNames := []string{"output_label"}
 
-    session, err := ort.NewDynamicSession[float32, float32](
+    session, err := ort.NewDynamicSession[float64, int64](
         path,
         inputNames,
         outputNames,
@@ -76,9 +76,9 @@ func (p *ONNXPredictor) Predict(ctx context.Context, features []float64) ([]floa
 	p.mu.Lock()
 	defer p.mu.Unlock()
 
-    features32 := make([]float32, len(features))
+    features32 := make([]float64, len(features))
     for i, value := range features {
-        features32[i] = float32(value)
+        features32[i] = float64(value)
     }
 
     inputTensor, err := ort.NewTensor(p.inputShape, features32)
@@ -87,13 +87,13 @@ func (p *ONNXPredictor) Predict(ctx context.Context, features []float64) ([]floa
     }
     defer inputTensor.Destroy()
 
-    outputTensor, err := ort.NewEmptyTensor[float32](p.outputShape)
+    outputTensor, err := ort.NewEmptyTensor[int64](p.outputShape)
     if err != nil {
         return nil, &domain.PredictionError{ModelID: p.ID, Cause: err}
     }
     defer outputTensor.Destroy()
 
-    err = p.session.Run([]*ort.Tensor[float32]{inputTensor}, []*ort.Tensor[float32]{outputTensor})
+    err = p.session.Run([]*ort.Tensor[float64]{inputTensor}, []*ort.Tensor[int64]{outputTensor})
     if err != nil {
         return nil, &domain.PredictionError{ModelID: p.ID, Cause: err}
     }
@@ -109,7 +109,7 @@ func (p *ONNXPredictor) Predict(ctx context.Context, features []float64) ([]floa
 }
 
 
-func (p *ONNXPredictor) MetaData() domain.ModelMetadata {
+func (p *ONNXPredictor) Metadata() domain.ModelMetadata {
     return domain.ModelMetadata{
         ID: p.ID,
         Name: p.Name,

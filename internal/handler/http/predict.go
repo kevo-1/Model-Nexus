@@ -1,6 +1,7 @@
 package http
 
 import (
+	"log"
     "encoding/json"
     "net/http"
     
@@ -15,30 +16,33 @@ func (h *Handler) handlePredict(w http.ResponseWriter, r *http.Request) {
     
     var req domain.PredictionRequest
     if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+        log.Printf("JSON decode error: %v", err)
         http.Error(w, "Invalid JSON", http.StatusBadRequest)
         return
     }
     
-	res, err := h.predictionService.Predict(r.Context(), req)
+    res, err := h.predictionService.Predict(r.Context(), req)
     
-	if err != nil {
-		switch e := err.(type) {
-			case *domain.ValidationError:
-				http.Error(w, e.Error(), http.StatusBadRequest)  // 400
-				return
-			case *domain.ModelNotFoundError:
-				http.Error(w, e.Error(), http.StatusNotFound)    // 404
-				return
-			case *domain.InvalidInputError:
-				http.Error(w, e.Error(), http.StatusBadRequest)  // 400
-				return
-			default:
-				http.Error(w, "Internal server error", http.StatusInternalServerError)  // 500
-				return
-		}
-	}
+    if err != nil {
+        log.Printf("Prediction error: %v", err)
+        switch e := err.(type) {
+            case *domain.ValidationError:
+                http.Error(w, e.Error(), http.StatusBadRequest)
+                return
+            case *domain.ModelNotFoundError:
+                http.Error(w, e.Error(), http.StatusNotFound)
+                return
+            case *domain.InvalidInputError:
+                http.Error(w, e.Error(), http.StatusBadRequest)
+                return
+            default:
+                log.Printf("Unhandled error type: %T", err)
+                http.Error(w, "Internal server error", http.StatusInternalServerError)
+                return
+        }
+    }
     
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(res)
+    w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(http.StatusOK)
+    json.NewEncoder(w).Encode(res)
 }
