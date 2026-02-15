@@ -1,4 +1,4 @@
-module github.com/kevo-1/model-serving-platform
+module github.com/kevo-1/model-nexus
 
 go 1.24.0
 

@@ -1,11 +1,11 @@
 package onnx
 
 import (
-    "context"
-    "math/rand"
-    "time"
+	"context"
+	"math/rand"
+	"time"
 
-    "github.com/kevo-1/model-serving-platform/internal/domain"
+	"github.com/kevo-1/model-nexus/internal/domain"
 )
 
 type DummyPredictor struct {

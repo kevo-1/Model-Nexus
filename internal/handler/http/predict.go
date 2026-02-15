@@ -2,11 +2,11 @@ package http
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
-    "fmt"
 
-	"github.com/kevo-1/model-serving-platform/internal/domain"
-	"github.com/kevo-1/model-serving-platform/internal/logger"
+	"github.com/kevo-1/model-nexus/internal/domain"
+	"github.com/kevo-1/model-nexus/internal/logger"
 )
 
 func (h *Handler) handlePredict(w http.ResponseWriter, r *http.Request) {

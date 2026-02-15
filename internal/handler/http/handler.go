@@ -3,8 +3,8 @@ package http
 import (
 	"net/http"
 
-	"github.com/kevo-1/model-serving-platform/internal/repository"
-	"github.com/kevo-1/model-serving-platform/internal/service"
+	"github.com/kevo-1/model-nexus/internal/repository"
+	"github.com/kevo-1/model-nexus/internal/service"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 

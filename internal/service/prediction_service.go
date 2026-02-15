@@ -4,10 +4,10 @@ import (
 	"context"
 	"time"
 
-	"github.com/kevo-1/model-serving-platform/internal/domain"
-	"github.com/kevo-1/model-serving-platform/internal/logger"
-	"github.com/kevo-1/model-serving-platform/internal/metrics"
-	"github.com/kevo-1/model-serving-platform/internal/repository"
+	"github.com/kevo-1/model-nexus/internal/domain"
+	"github.com/kevo-1/model-nexus/internal/logger"
+	"github.com/kevo-1/model-nexus/internal/metrics"
+	"github.com/kevo-1/model-nexus/internal/repository"
 )
 
 type PredictionService struct {

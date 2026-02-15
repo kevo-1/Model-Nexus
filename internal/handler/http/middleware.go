@@ -1,13 +1,13 @@
 package http
 
 import (
-    "net/http"
-    "context"
-    "time"
-    
-    "github.com/google/uuid" 
-    "github.com/kevo-1/model-serving-platform/internal/logger"
-    "github.com/kevo-1/model-serving-platform/internal/metrics"
+	"context"
+	"net/http"
+	"time"
+
+	"github.com/google/uuid"
+	"github.com/kevo-1/model-nexus/internal/logger"
+	"github.com/kevo-1/model-nexus/internal/metrics"
 )
 
 

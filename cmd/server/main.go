@@ -9,10 +9,10 @@ import (
 	"syscall"
 
 	"github.com/joho/godotenv"
-	httpHandler "github.com/kevo-1/model-serving-platform/internal/handler/http"
-	"github.com/kevo-1/model-serving-platform/internal/logger"
-	"github.com/kevo-1/model-serving-platform/internal/repository"
-	"github.com/kevo-1/model-serving-platform/pkg/onnx"
+	httpHandler "github.com/kevo-1/model-nexus/internal/handler/http"
+	"github.com/kevo-1/model-nexus/internal/logger"
+	"github.com/kevo-1/model-nexus/internal/repository"
+	"github.com/kevo-1/model-nexus/pkg/onnx"
 	ort "github.com/yalue/onnxruntime_go"
 )
 

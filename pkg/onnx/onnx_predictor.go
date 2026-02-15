@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/kevo-1/model-serving-platform/internal/domain"
+	"github.com/kevo-1/model-nexus/internal/domain"
 	ort "github.com/yalue/onnxruntime_go"
 )
 
