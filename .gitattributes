@@ -1,0 +1,12 @@
+# Exclude HTML files from language statistics
+*.html linguist-vendored
+
+# Exclude documentation files
+*.md linguist-documentation
+
+# Mark Go as the main language
+*.go linguist-language=Go
+
+# Optional: If you have any generated files or vendor directories
+models/* linguist-generated
+scripts/* linguist-vendored
